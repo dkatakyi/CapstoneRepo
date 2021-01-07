@@ -9,6 +9,7 @@
 #define SRC_USR_LCD_H_
 
 #include <stdint.h>
+#include <ctype.h>
 
 #define LCD_CM_ENA 0x00210002 //
 #define LCD_CM_DIS 0x00230000 //
@@ -24,8 +25,8 @@ void DAT2LCD(uint8_t);
 
 void lcd_init(void);
 
-void print2LCD(uint64_t);
-
 void dipSW2LCD(uint8_t);
+
+void char2LCD(char *);
 
 #endif /* SRC_USR_LCD_H_ */

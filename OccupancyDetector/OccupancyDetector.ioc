@@ -1,8 +1,8 @@
 #MicroXplorer Configuration settings - do not modify
 FREERTOS.FootprintOK=true
 FREERTOS.IPParameters=Tasks01,FootprintOK,Queues01
-FREERTOS.Queues01=dataQueue,1,uint16_t,0,Dynamic,NULL,NULL;structQueue,1,struct DataStruct,0,Dynamic,NULL,NULL
-FREERTOS.Tasks01=calcTask,8,128,StartCalcTask,Default,NULL,Dynamic,NULL,NULL;sendTask,40,128,StartSendTask,Default,NULL,Dynamic,NULL,NULL
+FREERTOS.Queues01=structQueue,1,struct DataStruct,0,Dynamic,NULL,NULL;rawQueue,1,struct DataStruct,0,Dynamic,NULL,NULL
+FREERTOS.Tasks01=calcTask,24,128,StartCalcTask,Default,NULL,Dynamic,NULL,NULL;sendTask,40,128,StartSendTask,Default,NULL,Dynamic,NULL,NULL;lcdTask,8,128,StartLcdTask,Default,NULL,Dynamic,NULL,NULL
 File.Version=6
 GPIO.groupedBy=Group By Peripherals
 KeepUserPlacement=false

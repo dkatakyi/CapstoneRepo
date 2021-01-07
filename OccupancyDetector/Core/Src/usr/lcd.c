@@ -5,8 +5,8 @@
  *      Author: danieltakyi
  */
 
- #include "stm32f1xx.h"
- #include "lcd.h"
+#include "stm32f1xx.h"
+#include "lcd.h"
 
 
 void lcd_IO_init (void)
@@ -75,98 +75,255 @@ void DAT2LCD(uint8_t data)
 	GPIOB->BSRR = LCD_DM_ENA;
 	GPIOC->ODR &= 0xFF00;
 	GPIOC->ODR |= data;
-	HAL_Delay(50);
+	HAL_Delay(5);
 	//delay(8000);
 
 	GPIOB->BSRR = LCD_DM_DIS;
-	HAL_Delay(180);
+	HAL_Delay(20);
 	//delay(80000);
 
-}
-
-void print2LCD(uint64_t word)
-{
-	//assumes that word is presented the function backwards;
-	//if you want to present a word to the function in its order of characters, then a mirror function is needed
-	//
-	//to mirror, you need to shift and copy adeptly. use multiples of 8
-
-	while(word != 0)
-	{
-		DAT2LCD(word);
-		word >>= 0x08;
-	}
 }
 
 void dipSW2LCD(uint8_t val)
 {
 	switch(val){
 	case 0x00:
-		print2LCD(0x30);
+		DAT2LCD(0x30);
 		break;
 
 	case 0x01:
-		print2LCD(0x31);
+		DAT2LCD(0x31);
 		break;
 
 	case 0x02:
-		print2LCD(0x32);
+		DAT2LCD(0x32);
 		break;
 
 	case 0x03:
-		print2LCD(0x33);
+		DAT2LCD(0x33);
 		break;
 
 	case 0x04:
-		print2LCD(0x34);
+		DAT2LCD(0x34);
 		break;
 
 	case 0x05:
-		print2LCD(0x35);
+		DAT2LCD(0x35);
 		break;
 
 	case 0x06:
-		print2LCD(0x36);
+		DAT2LCD(0x36);
 		break;
 
 	case 0x07:
-		print2LCD(0x37);
+		DAT2LCD(0x37);
 		break;
 
 	case 0x08:
-		print2LCD(0x38);
+		DAT2LCD(0x38);
 		break;
 
 	case 0x09:
-		print2LCD(0x39);
+		DAT2LCD(0x39);
 		break;
 
 	case 0x0A:
-		print2LCD(0x41);
+		DAT2LCD(0x41);
 		break;
 
 	case 0x0B:
-		print2LCD(0x42);
+		DAT2LCD(0x42);
 		break;
 
 	case 0x0C:
-		print2LCD(0x43);
+		DAT2LCD(0x43);
 		break;
 
 	case 0x0D:
-		print2LCD(0x44);
+		DAT2LCD(0x44);
 		break;
 
 	case 0x0E:
-		print2LCD(0x45);
+		DAT2LCD(0x45);
 		break;
 
 	case 0x0F:
-		print2LCD(0x46);
+		DAT2LCD(0x46);
 		break;
 
 	default:
 		break;
 	}
+}
 
+void char2LCD(char * val)
+{
+	//toLower()
+
+	int i = 0;
+	while(val[i] != NULL)
+	{
+		switch(val[i]){
+		case '0':
+			DAT2LCD(0x30);
+			break;
+
+		case '1':
+			DAT2LCD(0x31);
+			break;
+
+		case '2':
+			DAT2LCD(0x32);
+			break;
+
+		case '3':
+			DAT2LCD(0x33);
+			break;
+
+		case '4':
+			DAT2LCD(0x34);
+			break;
+
+		case '5':
+			DAT2LCD(0x35);
+			break;
+
+		case '6':
+			DAT2LCD(0x36);
+			break;
+
+		case '7':
+			DAT2LCD(0x37);
+			break;
+
+		case '8':
+			DAT2LCD(0x38);
+			break;
+
+		case '9':
+			DAT2LCD(0x39);
+			break;
+
+		case 'a':
+			DAT2LCD(0x41);
+			break;
+
+		case 'b':
+			DAT2LCD(0x42);
+			break;
+
+		case 'c':
+			DAT2LCD(0x43);
+			break;
+
+		case 'd':
+			DAT2LCD(0x44);
+			break;
+
+		case 'e':
+			DAT2LCD(0x45);
+			break;
+
+		case 'f':
+			DAT2LCD(0x46);
+			break;
+
+		case 'g':
+			DAT2LCD(0x47);
+			break;
+
+		case 'h':
+			DAT2LCD(0x48);
+			break;
+
+		case 'i':
+			DAT2LCD(0x49);
+			break;
+
+		case 'j':
+			DAT2LCD(0x4A);
+			break;
+
+		case 'k':
+			DAT2LCD(0x4B);
+			break;
+
+		case 'l':
+			DAT2LCD(0x4C);
+			break;
+
+		case 'm':
+			DAT2LCD(0x4D);
+			break;
+
+		case 'n':
+			DAT2LCD(0x4E);
+			break;
+
+		case 'o':
+			DAT2LCD(0x4F);
+			break;
+
+		case 'p':
+			DAT2LCD(0x50);
+			break;
+
+		case 'q':
+			DAT2LCD(0x51);
+			break;
+
+		case 'r':
+			DAT2LCD(0x52);
+			break;
+
+		case 's':
+			DAT2LCD(0x53);
+			break;
+
+		case 't':
+			DAT2LCD(0x54);
+			break;
+
+		case 'u':
+			DAT2LCD(0x55);
+			break;
+
+		case 'v':
+			DAT2LCD(0x56);
+			break;
+
+		case 'w':
+			DAT2LCD(0x57);
+			break;
+
+		case 'x':
+			DAT2LCD(0x58);
+			break;
+
+		case 'y':
+			DAT2LCD(0x59);
+			break;
+
+		case 'z':
+			DAT2LCD(0x5A);
+			break;
+
+		case ' ':
+			DAT2LCD(0x20);
+			break;
+			/*
+	case '.':
+		DAT2LCD();
+		break;
+
+	case ':':
+		DAT2LCD();
+		break;
+			 */
+
+		default:
+			break;
+		}
+		i++;
+	}
 }

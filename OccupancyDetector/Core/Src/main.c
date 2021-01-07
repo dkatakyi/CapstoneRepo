@@ -49,7 +49,7 @@ UART_HandleTypeDef huart2;
 osThreadId_t calcTaskHandle;
 const osThreadAttr_t calcTask_attributes = {
   .name = "calcTask",
-  .priority = (osPriority_t) osPriorityLow,
+  .priority = (osPriority_t) osPriorityNormal,
   .stack_size = 128 * 4
 };
 /* Definitions for sendTask */
@@ -59,15 +59,22 @@ const osThreadAttr_t sendTask_attributes = {
   .priority = (osPriority_t) osPriorityHigh,
   .stack_size = 128 * 4
 };
-/* Definitions for dataQueue */
-osMessageQueueId_t dataQueueHandle;
-const osMessageQueueAttr_t dataQueue_attributes = {
-  .name = "dataQueue"
+/* Definitions for lcdTask */
+osThreadId_t lcdTaskHandle;
+const osThreadAttr_t lcdTask_attributes = {
+  .name = "lcdTask",
+  .priority = (osPriority_t) osPriorityLow,
+  .stack_size = 128 * 4
 };
 /* Definitions for structQueue */
 osMessageQueueId_t structQueueHandle;
 const osMessageQueueAttr_t structQueue_attributes = {
   .name = "structQueue"
+};
+/* Definitions for rawQueue */
+osMessageQueueId_t rawQueueHandle;
+const osMessageQueueAttr_t rawQueue_attributes = {
+  .name = "rawQueue"
 };
 /* USER CODE BEGIN PV */
 
@@ -79,6 +86,7 @@ static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 void StartCalcTask(void *argument);
 void StartSendTask(void *argument);
+void StartLcdTask(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -124,17 +132,17 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  //	 lcd_IO_init();
-  //
-  //	 lcd_init();
-  //
-  //	 print2LCD(0x54204C45494E4144);
-  //
-  //	 CMD2LCD(0xC0);
-  //
-  //	 print2LCD(0x3033363733303032);
-  //
-  //	 print2LCD(0x33);
+  lcd_IO_init();
+
+  lcd_init();
+
+  char2LCD("hello");
+
+  CMD2LCD(0xC0);
+
+  char2LCD("there");
+
+  dipSW2LCD(0x00);
 
   printString("\x1b[2J");
 
@@ -158,11 +166,11 @@ int main(void)
   /* USER CODE END RTOS_TIMERS */
 
   /* Create the queue(s) */
-  /* creation of dataQueue */
-  dataQueueHandle = osMessageQueueNew (1, sizeof(uint16_t), &dataQueue_attributes);
-
   /* creation of structQueue */
   structQueueHandle = osMessageQueueNew (1, sizeof(struct DataStruct), &structQueue_attributes);
+
+  /* creation of rawQueue */
+  rawQueueHandle = osMessageQueueNew (1, sizeof(struct DataStruct), &rawQueue_attributes);
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
@@ -174,6 +182,9 @@ int main(void)
 
   /* creation of sendTask */
   sendTaskHandle = osThreadNew(StartSendTask, NULL, &sendTask_attributes);
+
+  /* creation of lcdTask */
+  lcdTaskHandle = osThreadNew(StartLcdTask, NULL, &lcdTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -387,6 +398,24 @@ void StartSendTask(void *argument)
 	}
 	osThreadTerminate(NULL);
   /* USER CODE END StartSendTask */
+}
+
+/* USER CODE BEGIN Header_StartLcdTask */
+/**
+* @brief Function implementing the lcdTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartLcdTask */
+void StartLcdTask(void *argument)
+{
+  /* USER CODE BEGIN StartLcdTask */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END StartLcdTask */
 }
 
 /**
