@@ -138,11 +138,9 @@ int main(void)
 
   char2LCD("hello");
 
-  CMD2LCD(0xC0);
+//  CMD2LCD(0xC0);
 
-  char2LCD("there");
-
-  dipSW2LCD(0x00);
+//  char2LCD("there");
 
   printString("\x1b[2J");
 
@@ -344,11 +342,17 @@ void StartCalcTask(void *argument)
 	/* Infinite loop */
 	for(;;)
 	{
-//		if(osMessageQueuePut(dataQueueHandle, &dc.temp, 1U, 0U)!= osOK)
-//		{
-//			Error_Handler();
-//		}
-		if(osMessageQueuePut(structQueueHandle, &dc, 1U, 0U)!= osOK)
+		//SensorReads()
+
+		if(osMessageQueuePut(rawQueueHandle, &dc, 1U, 0U) != osOK)
+		{
+			Error_Handler();
+		}
+
+		//DataFormat()
+		//OccupancyCalculation()
+
+		if(osMessageQueuePut(structQueueHandle, &dc, 1U, 0U) != osOK)
 		{
 			Error_Handler();
 		}
@@ -371,17 +375,11 @@ void StartCalcTask(void *argument)
 void StartSendTask(void *argument)
 {
   /* USER CODE BEGIN StartSendTask */
-	uint16_t data;
 	uint8_t data_str[40];
 	struct DataStruct dc;
 	/* Infinite loop */
 	for(;;)
 	{
-//		if(osMessageQueueGet(dataQueueHandle, &data, NULL, 0U) == osOK)
-//		{
-//			sprintf((char *)data_str, "%d", data);
-//			printString((char *)data_str);
-//		}
 		if(osMessageQueueGet(structQueueHandle, &dc, NULL, 0U) == osOK)
 		{
 			sprintf((char *)data_str, "%d", dc.temp);
@@ -410,11 +408,26 @@ void StartSendTask(void *argument)
 void StartLcdTask(void *argument)
 {
   /* USER CODE BEGIN StartLcdTask */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
+	uint8_t raw_str[40];
+	struct DataStruct rc;
+	/* Infinite loop */
+	for(;;)
+	{
+		if(osMessageQueueGet(rawQueueHandle, &rc, NULL, 0U) == osOK)
+		{
+			CMD2LCD(0xC0);
+			sprintf((char *)raw_str, "%d", rc.temp);
+			char2LCD((char *)raw_str);
+			//	  			sprintf((char *)data_str, "%d", dc.CO2);
+			//	  			printString((char *)data_str);
+			//	  			printString("     ");
+			//	  			sprintf((char *)data_str, "%d", dc.dB);
+			//	  			printString((char *)data_str);
+			//	  			printString("\r\n");
+		}
+		osDelay(1);
+	}
+	osThreadTerminate(NULL);
   /* USER CODE END StartLcdTask */
 }
 
