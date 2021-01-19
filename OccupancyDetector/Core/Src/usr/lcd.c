@@ -33,12 +33,12 @@ void CMD2LCD(uint8_t data)
 	GPIOC->ODR &= 0xFF00;
 	GPIOC->ODR |= data;
 
-	HAL_Delay(50);
+	HAL_Delay(2);
 	//delay(8000);
 
 	GPIOB->BSRR = LCD_CM_DIS;
 
-	HAL_Delay(180);
+	HAL_Delay(14);
 	//delay(80000);
 
 }
@@ -48,24 +48,24 @@ void lcd_init(void)
 	for(int j = 0; j < 3; j++)
 	{
 		CMD2LCD(0X38);
-		HAL_Delay(80);
+		HAL_Delay(5);
 		//delay(24600);
 	}
 
 	CMD2LCD(0X38);
-	HAL_Delay(80);
+	HAL_Delay(5);
 	//delay(24600);
 
 	CMD2LCD(0X0F);
-	HAL_Delay(80);
+	HAL_Delay(5);
 	//delay(24600);
 
 	CMD2LCD(0X01);
-	HAL_Delay(80);
+	HAL_Delay(5);
 	//delay(24600);
 
 	CMD2LCD(0X06);
-	HAL_Delay(80);
+	HAL_Delay(5);
 	//delay(24600);
 
 }
@@ -75,11 +75,11 @@ void DAT2LCD(uint8_t data)
 	GPIOB->BSRR = LCD_DM_ENA;
 	GPIOC->ODR &= 0xFF00;
 	GPIOC->ODR |= data;
-	HAL_Delay(5);
+	HAL_Delay(2);
 	//delay(8000);
 
 	GPIOB->BSRR = LCD_DM_DIS;
-	HAL_Delay(20);
+	HAL_Delay(14);
 	//delay(80000);
 
 }
@@ -311,15 +311,14 @@ void char2LCD(char * val)
 		case ' ':
 			DAT2LCD(0x20);
 			break;
-			/*
-	case '.':
-		DAT2LCD();
-		break;
 
-	case ':':
-		DAT2LCD();
-		break;
-			 */
+		case '.':
+			DAT2LCD(0x2E);
+			break;
+
+		case ':':
+			DAT2LCD(0x3A);
+			break;
 
 		default:
 			break;
