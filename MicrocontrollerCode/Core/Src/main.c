@@ -549,8 +549,10 @@ void StartLcdTask(void *argument)
 	{
 		if(osMessageQueueGet(rawQueueHandle, &rc, NULL, 0U) == osOK)
 		{
-			if(osMessageQueueGet(roomQueueHandle, &roomSz, NULL, 0U))
+			if(osMessageQueueGet(roomQueueHandle, &roomSz, NULL, 0U) == osOK)
 			{
+				roomSz = roomSz / 2.67;
+				roomSz += 500;
 				sprintf((char *)raw_str, "%d", roomSz);
 				CMD2LCD(0x80);
 				char2LCD("rs:");
