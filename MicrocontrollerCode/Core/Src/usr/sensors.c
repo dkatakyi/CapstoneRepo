@@ -6,18 +6,18 @@
  */
 #include "sensors.h"
 
-void CO2Conversion()
+uint32_t CO2Conversion()
 {
  
 }
-void TempConversion()
+uint32_t TempConversion()
 {
   float tempVal;
   
    return tempVal = 0.001/(/*input pin read*/);   /*0.001 is voltage per degree celsius conversion value*/
  }
 
-void NoiseConversion()
+uint32_t NoiseConversion()
 {
  float PinVoltage, dBVal;
  
