@@ -8,6 +8,23 @@
 
 uint32_t CO2Conversion()
 {
+ if(/*input pin read*/ == 0)
+ {
+  return 0;
+ }
+
+ else if((/*input pin read*/) < 0.4)  /*preheating voltage is from 0.2 to 0.4 */
+ {
+  return -1;
+ }
+
+ else 
+ {
+  int voltagedif = ((/*input pin read*/) * 1000) - 400;
+  float PPM = voltagedif * 50.0/16.0; 
+  
+  return PPM;
+ }
  
 }
 uint32_t TempConversion()
