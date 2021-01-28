@@ -6,44 +6,38 @@
  */
 #include "sensors.h"
 
-uint32_t CO2Conversion() 
+float CO2Conversion(uint32_t input) 
 {
- if(/*input pin read*/ == 0)
+ if(input == 0)
  {
   return 0; /*this should print fault*/
  }
 
- else if((/*input pin read*/) < 0.4)  /*preheating voltage is from 0.2 to 0.4 */
+ else if((input) < 0.4)  /*preheating voltage is from 0.2 to 0.4 */
  {
   return -1; /* this should print "preheating CO2"*/
  }
 
  else 
  {
-  int voltagedif = ((/*input pin read*/) * 1000) - 400; /*this is for voltage to PPM conversion*/
-  float PPM = voltagedif * 50.0/16.0; 
-  
-  return PPM;
- }
+  float voltagedif = ((input) * 1000) - 400; /*this is for voltage to PPM conversion*/
+  return voltagedif * 50.0/16.0; 
+  }
  /*CO2 has a 100ms delay before looping*/
 }
 
 
-uint32_t TempConversion()
+float TempConversion(uint32_t input)
 {
-  float tempVal;
-  
-   return tempVal = 0.001/(/*input pin read*/);   /*0.001 is voltage per degree celsius conversion value*/
- 
- /* has an unknown delay before looping*/
+  return (input )* 5/10.24;   /* voltage to degree celsius conversion*/
+  /* has an 500ms delay before looping*/
  }
 
-uint32_t NoiseConversion()
+float NoiseConversion(uint32_t input)
 {
- float PinVoltage, dBVal;
- 
-  PinVoltage = (/*input pin read*/) / 1024.0 * 5.0;   /* 5.0 is voltage that is powering sensor */
-  return  dBVal = PinVoltage * 50.0; /* 50.0 is voltage to dB conversion value */
+ float PinVoltage;
+  PinVoltage = (input) / 1024.0 * 5.0;   /* 5.0 is voltage that is powering sensor */
+  return PinVoltage * 50.0; /* 50.0 is voltage to dB conversion value */
  
  
  /* has an 125ms delay before looping*/
