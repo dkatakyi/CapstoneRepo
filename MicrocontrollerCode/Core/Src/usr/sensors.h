@@ -8,13 +8,17 @@
 #ifndef SRC_USR_SENSORS_H_
 #define SRC_USR_SENSORS_H_
 
+
 #include <stdint.h>
 #include "main.h"
 
-
 extern ADC_HandleTypeDef hadc1;
 
+float CO2Conversion(uint32_t input);
 
+float TempConversion(uint32_t input);
+
+float NoiseConversion(uint32_t input);
 
 void CO2_Select(void);
 
