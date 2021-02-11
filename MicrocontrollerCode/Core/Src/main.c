@@ -600,7 +600,7 @@ void StartLcdTask(void *argument)
 void StartSelectTask(void *argument)
 {
   /* USER CODE BEGIN StartSelectTask */
-	uint8_t roomSz_str[40];
+	uint8_t room_str[40];
 	uint16_t roomSz = 0;
 	/* Infinite loop */
 	for(;;)
@@ -611,13 +611,26 @@ void StartSelectTask(void *argument)
 		char2LCD("use inputs");
 		CMD2LCD(0xC0);
 		char2LCD("room size: ");
+		POT_Select();
 		while(sel == true)
 		{
 			CMD2LCD(0xCB);
-			HAL_ADC_Start(&hadc1);
-			HAL_ADC_PollForConversion (&hadc1, 1000);
-			roomSz = reg_out(HAL_ADC_GetValue(&hadc1));
-			HAL_ADC_Stop(&hadc1);
+
+			roomSz = ADC_Read();
+			if(roomSz < 0x555)
+			{
+				strcpy((char *)room_str, "ed435");
+			}
+			else if(roomSz < 0xAAA)
+			{
+				strcpy((char *)room_str, "ed486");
+			}
+			else if(roomSz < 0xFFF)
+			{
+				strcpy((char *)room_str, "cl110");
+			}
+
+			char2LCD((char *)room_str);
 
 		}
 		sel = false;
