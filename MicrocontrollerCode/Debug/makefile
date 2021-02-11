@@ -51,8 +51,8 @@ OccupancyDetector.bin \
 all: OccupancyDetector.elf secondary-outputs
 
 # Tool invocations
-OccupancyDetector.elf: $(OBJS) $(USER_OBJS) /Users/danieltakyi/Documents/ENEL400/CapstoneRepo/OccupancyDetector/STM32F103RBTX_FLASH.ld
-	arm-none-eabi-gcc -o "OccupancyDetector.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"/Users/danieltakyi/Documents/ENEL400/CapstoneRepo/OccupancyDetector/STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="OccupancyDetector.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+OccupancyDetector.elf: $(OBJS) $(USER_OBJS) /Users/danieltakyi/Documents/ENEL400/CapstoneRepo/MicrocontrollerCode/STM32F103RBTX_FLASH.ld
+	arm-none-eabi-gcc -o "OccupancyDetector.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"/Users/danieltakyi/Documents/ENEL400/CapstoneRepo/MicrocontrollerCode/STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="OccupancyDetector.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

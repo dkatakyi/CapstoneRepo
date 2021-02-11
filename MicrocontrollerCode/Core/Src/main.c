@@ -26,6 +26,7 @@
 #include "stm32f1xx.h"
 #include "./usr/lcd.h"
 #include "./usr/CommMod.h"
+#include "./usr/sensors.h"
 #include <stdbool.h>
 /* USER CODE END Includes */
 
@@ -307,13 +308,13 @@ static void MX_ADC1_Init(void)
   }
   /** Configure Regular Channel
   */
-  sConfig.Channel = ADC_CHANNEL_7;
-  sConfig.Rank = ADC_REGULAR_RANK_1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
-  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
+//  sConfig.Channel = ADC_CHANNEL_7;
+//  sConfig.Rank = ADC_REGULAR_RANK_1;
+//  sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
+//  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+//  {
+//    Error_Handler();
+//  }
   /* USER CODE BEGIN ADC1_Init 2 */
 
   /* USER CODE END ADC1_Init 2 */
@@ -475,7 +476,17 @@ void StartCalcTask(void *argument)
 	/* Infinite loop */
 	for(;;)
 	{
-		//SensorReads()
+		TEMP_Select();
+		dc.temp = TempConversion(ADC_Read());
+
+//		CO2_Select();
+//		dc.CO2 = CO2Conversion(ADC_Read());
+//
+//		NOISE_Select();
+//		dc.dB = NoiseConversion(ADC_Read());
+
+		dc.CO2 += 5;
+		dc.dB += 10;
 
 		if(osMessageQueuePut(rawQueueHandle, &dc, 1U, 0U) != osOK)
 		{
@@ -489,9 +500,7 @@ void StartCalcTask(void *argument)
 		{
 			Error_Handler();
 		}
-		dc.temp += 2;
-		dc.CO2 += 5;
-		dc.dB += 10;
+
 		osDelay(500);
 	}
 	osThreadTerminate(NULL);

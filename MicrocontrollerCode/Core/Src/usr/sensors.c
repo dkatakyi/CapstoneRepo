@@ -8,7 +8,7 @@
 #include "sensors.h"
 
 
-float CO2Conversion(uint32_t input) 
+uint16_t CO2Conversion(uint32_t input)
 {
  if(input == 0)
  {
@@ -26,13 +26,13 @@ float CO2Conversion(uint32_t input)
  /*CO2 has a 100ms delay before looping*/
 }
 
-float TempConversion(uint32_t input)
+uint16_t TempConversion(uint32_t input)
 {
-  return (input )* 5/10.24;   /* voltage to degree celsius conversion*/
+  return input / 10;   /* voltage to degree celsius conversion*/
   /* has an 500ms delay before looping*/
  }
 
-float NoiseConversion(uint32_t input)
+uint16_t NoiseConversion(uint32_t input)
 {
  float PinVoltage;
   PinVoltage = (input) / 1024.0 * 5.0;   /* 5.0 is voltage that is powering sensor */

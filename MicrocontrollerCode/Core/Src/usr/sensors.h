@@ -14,11 +14,11 @@
 
 extern ADC_HandleTypeDef hadc1;
 
-float CO2Conversion(uint32_t input);
+uint16_t CO2Conversion(uint32_t input);
 
-float TempConversion(uint32_t input);
+uint16_t TempConversion(uint32_t input);
 
-float NoiseConversion(uint32_t input);
+uint16_t NoiseConversion(uint32_t input);
 
 void CO2_Select(void);
 
