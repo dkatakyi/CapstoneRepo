@@ -11,6 +11,6 @@
 #include <stdint.h>
 #include "main.h"
 
-
+char * roomSelect(uint16_t);
 
 #endif /* SRC_USR_USERINPUT_H_ */

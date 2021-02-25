@@ -14,14 +14,14 @@ uint16_t CO2Conversion(uint32_t input)
  {
   return 0; /*this should print fault*/
  }
- else if((input) < 0.4)  /*preheating voltage is from 0.2 to 0.4 */
+ else if((input) < 400)  /*preheating voltage is from 0.2 to 0.4 */
  {
   return -1; /* this should print "preheating CO2"*/
  }
  else 
  {
-  float voltagedif = ((input) * 1000) - 400; /*this is for voltage to PPM conversion*/
-  return voltagedif * 50.0/16.0; 
+  uint16_t voltagedif = (input - 400) * 50 / 16; /*this is for voltage to PPM conversion*/
+  return voltagedif;
   }
  /*CO2 has a 100ms delay before looping*/
 }
@@ -34,10 +34,18 @@ uint16_t TempConversion(uint32_t input)
 
 uint16_t NoiseConversion(uint32_t input)
 {
- float PinVoltage;
-  PinVoltage = (input) / 1024.0 * 5.0;   /* 5.0 is voltage that is powering sensor */
-  return PinVoltage * 50.0; /* 50.0 is voltage to dB conversion value */ 
+ uint16_t PinVoltage;
+//  PinVoltage = (input) / 1024.0 * 5.0;   /* 5.0 is voltage that is powering sensor */
+//  return PinVoltage * 50.0; /* 50.0 is voltage to dB conversion value */
  /* has an 125ms delay before looping*/
+
+input = (float)input / 1000 * 50;
+
+// input = input - 600;
+// input /= 20;
+// input += 30;
+ return input;
+
 }
 
 void CO2_Select(void)

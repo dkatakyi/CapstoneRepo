@@ -27,6 +27,7 @@
 #include "./usr/lcd.h"
 #include "./usr/CommMod.h"
 #include "./usr/sensors.h"
+#include "./usr/UserInput.h"
 #include <stdbool.h>
 /* USER CODE END Includes */
 
@@ -70,13 +71,6 @@ const osThreadAttr_t lcdTask_attributes = {
   .priority = (osPriority_t) osPriorityLow,
   .stack_size = 128 * 4
 };
-/* Definitions for selectTask */
-osThreadId_t selectTaskHandle;
-const osThreadAttr_t selectTask_attributes = {
-  .name = "selectTask",
-  .priority = (osPriority_t) osPriorityHigh,
-  .stack_size = 128 * 4
-};
 /* Definitions for structQueue */
 osMessageQueueId_t structQueueHandle;
 const osMessageQueueAttr_t structQueue_attributes = {
@@ -95,6 +89,7 @@ const osMessageQueueAttr_t roomQueue_attributes = {
 /* USER CODE BEGIN PV */
 bool sel = true;
 bool proceed = false;
+uint8_t room_str[40];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -105,7 +100,6 @@ static void MX_ADC1_Init(void);
 void StartCalcTask(void *argument);
 void StartSendTask(void *argument);
 void StartLcdTask(void *argument);
-void StartSelectTask(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -156,7 +150,10 @@ int main(void)
 
   lcd_init();
 
-  char2LCD("hello");
+  //uint8_t room_str[40];
+  uint16_t roomSz = 0;
+
+//  char2LCD("hello");
 
 //  CMD2LCD(0xC0);
 
@@ -166,10 +163,42 @@ int main(void)
 
   printString("\x1b[0;0H");
 
-//  while(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13))
-//  {
-//
-//  }
+
+	CMD2LCD(0x01);
+	char2LCD("use inputs");
+	CMD2LCD(0xC0);
+	char2LCD("room size: ");
+	POT_Select();
+	while(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13))
+	{
+		CMD2LCD(0xCB);
+		//roomSz = ADC_Read();
+//			if(roomSz < 0x555)
+//			{
+//				strcpy((char *)room_str, "ed435");
+//			}
+//			else if(roomSz < 0xAAA)
+//			{
+//				strcpy((char *)room_str, "ed486");
+//			}
+//			else if(roomSz < 0xFFF)
+//			{
+//				strcpy((char *)room_str, "cl110");
+//			}
+
+		strcpy((char *)room_str, roomSelect(ADC_Read()));
+		char2LCD((char *)room_str);
+//		char2LCD("8");
+//		HAL_Delay(300);
+//		CMD2LCD(0xCB);
+//		char2LCD("2");
+//		HAL_Delay(300);
+	}
+	CMD2LCD(0x01);
+//	if(osMessageQueuePut(roomQueueHandle, &roomSz, 1U, 0U) != osOK)
+//	{
+//		Error_Handler();
+//	}
 
   /* USER CODE END 2 */
 
@@ -211,9 +240,6 @@ int main(void)
 
   /* creation of lcdTask */
   lcdTaskHandle = osThreadNew(StartLcdTask, NULL, &lcdTask_attributes);
-
-  /* creation of selectTask */
-  selectTaskHandle = osThreadNew(StartSelectTask, NULL, &selectTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -296,7 +322,7 @@ static void MX_ADC1_Init(void)
   /** Common config
   */
   hadc1.Instance = ADC1;
-  hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
+  hadc1.Init.ScanConvMode = ADC_SCAN_ENABLE;
   hadc1.Init.ContinuousConvMode = ENABLE;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
   hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
@@ -306,11 +332,34 @@ static void MX_ADC1_Init(void)
   {
     Error_Handler();
   }
-  /** Configure Regular Channel
-  */
+//  /** Configure Regular Channel
+//  */
 //  sConfig.Channel = ADC_CHANNEL_7;
 //  sConfig.Rank = ADC_REGULAR_RANK_1;
 //  sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
+//  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+//  {
+//    Error_Handler();
+//  }
+//  /** Configure Regular Channel
+//  */
+//  sConfig.Channel = ADC_CHANNEL_4;
+//  sConfig.Rank = ADC_REGULAR_RANK_2;
+//  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+//  {
+//    Error_Handler();
+//  }
+//  /** Configure Regular Channel
+//  */
+//  sConfig.Channel = ADC_CHANNEL_1;
+//  sConfig.Rank = ADC_REGULAR_RANK_3;
+//  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+//  {
+//    Error_Handler();
+//  }
+//  /** Configure Regular Channel
+//  */
+//  sConfig.Rank = ADC_REGULAR_RANK_4;
 //  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
 //  {
 //    Error_Handler();
@@ -380,7 +429,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : PC13 */
   GPIO_InitStruct.Pin = GPIO_PIN_13;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
@@ -407,30 +456,26 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /* EXTI interrupt init*/
-  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 1, 0);
-  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
-
 }
 
 /* USER CODE BEGIN 4 */
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-	if(GPIO_Pin == GPIO_PIN_13)
-	{
-		if(sel == false)
-		{
-			sel = true;
-		}
-		else
-		{
-			sel = false;
-		}
-		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-
-	}
-
-}
+//void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+//{
+//	if(GPIO_Pin == GPIO_PIN_13)
+//	{
+//		if(sel == false)
+//		{
+//			sel = true;
+//		}
+//		else
+//		{
+//			sel = false;
+//		}
+//		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+//
+//	}
+//
+//}
 
 uint16_t reg_out( uint32_t reg_data){
 
@@ -479,14 +524,14 @@ void StartCalcTask(void *argument)
 		TEMP_Select();
 		dc.temp = TempConversion(ADC_Read());
 
-//		CO2_Select();
-//		dc.CO2 = CO2Conversion(ADC_Read());
-//
-//		NOISE_Select();
-//		dc.dB = NoiseConversion(ADC_Read());
+		CO2_Select();
+		dc.CO2 = CO2Conversion(ADC_Read());
 
-		dc.CO2 += 5;
-		dc.dB += 10;
+		NOISE_Select();
+		dc.dB = NoiseConversion(ADC_Read());
+
+//		dc.CO2 += 5;
+//		dc.dB += 10;
 
 		if(osMessageQueuePut(rawQueueHandle, &dc, 1U, 0U) != osOK)
 		{
@@ -526,10 +571,10 @@ void StartSendTask(void *argument)
 		{
 			sprintf((char *)data_str, "%d", dc.temp);
 			printString((char *)data_str);
-			printString("     ");
+			printString(" ");
 			sprintf((char *)data_str, "%d", dc.CO2);
 			printString((char *)data_str);
-			printString("     ");
+			printString(" ");
 			sprintf((char *)data_str, "%d", dc.dB);
 			printString((char *)data_str);
 			printString("\r\n");
@@ -558,15 +603,19 @@ void StartLcdTask(void *argument)
 	{
 		if(osMessageQueueGet(rawQueueHandle, &rc, NULL, 0U) == osOK)
 		{
-			if(osMessageQueueGet(roomQueueHandle, &roomSz, NULL, 0U) == osOK)
-			{
-				roomSz = roomSz / 2.67;
-				roomSz += 500;
-				sprintf((char *)raw_str, "%d", roomSz);
-				CMD2LCD(0x80);
-				char2LCD("rs:");
-				char2LCD((char *)raw_str);
-			}
+//			if(osMessageQueueGet(roomQueueHandle, &roomSz, NULL, 0U) == osOK)
+//			{
+//				roomSz = roomSz / 2.67;
+//				roomSz += 500;
+//				sprintf((char *)raw_str, "%d", roomSz);
+//				CMD2LCD(0x80);
+//				char2LCD("rs:");
+//				char2LCD((char *)raw_str);
+//			}
+
+			CMD2LCD(0x80);
+			char2LCD("rs:");
+			char2LCD((char *)room_str);
 
 			sprintf((char *)raw_str, "%d", rc.temp);
 			CMD2LCD(0x89);
@@ -588,62 +637,6 @@ void StartLcdTask(void *argument)
 	}
 	osThreadTerminate(NULL);
   /* USER CODE END StartLcdTask */
-}
-
-/* USER CODE BEGIN Header_StartSelectTask */
-/**
-* @brief Function implementing the selectTask thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_StartSelectTask */
-void StartSelectTask(void *argument)
-{
-  /* USER CODE BEGIN StartSelectTask */
-	uint8_t room_str[40];
-	uint16_t roomSz = 0;
-	/* Infinite loop */
-	for(;;)
-	{
-		if(sel == true)
-		{
-		CMD2LCD(0x01);
-		char2LCD("use inputs");
-		CMD2LCD(0xC0);
-		char2LCD("room size: ");
-		POT_Select();
-		while(sel == true)
-		{
-			CMD2LCD(0xCB);
-
-			roomSz = ADC_Read();
-			if(roomSz < 0x555)
-			{
-				strcpy((char *)room_str, "ed435");
-			}
-			else if(roomSz < 0xAAA)
-			{
-				strcpy((char *)room_str, "ed486");
-			}
-			else if(roomSz < 0xFFF)
-			{
-				strcpy((char *)room_str, "cl110");
-			}
-
-			char2LCD((char *)room_str);
-
-		}
-		sel = false;
-		CMD2LCD(0x01);
-		if(osMessageQueuePut(roomQueueHandle, &roomSz, 1U, 0U) != osOK)
-		{
-			Error_Handler();
-		}
-		}
-		osDelay(100);
-	}
-	osThreadTerminate(NULL);
-  /* USER CODE END StartSelectTask */
 }
 
 /**
