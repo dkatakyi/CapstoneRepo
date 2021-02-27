@@ -12,7 +12,7 @@
 #include "main.h"
 
 
-extern TIM_HandleTypeDef htim4;
+extern TIM_HandleTypeDef htim3;
 
 
 uint16_t timer_start();

@@ -29,6 +29,8 @@
 #include "./usr/sensors.h"
 #include "./usr/UserInput.h"
 #include <stdbool.h>
+
+#include "./usr/timer.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -159,47 +161,69 @@ int main(void)
 
 //  char2LCD("there");
 
-  printString("\x1b[2J");
+//  printString("\x1b[2J");
+//
+//  printString("\x1b[0;0H");
 
-  printString("\x1b[0;0H");
+//  volatile double timSELECT = 0;
+//  volatile double timLCD = 0;
+//  volatile double timCALC = 0;
+//  volatile double timSEND = 0;
+//  int num = 0;
+//  uint16_t volatile timStart;
+//  uint8_t textTX[56];
+//
+//  while(num < 100)
+//  {
+//  timStart = timer_start();
+  CMD2LCD(0x01);
+  char2LCD("use inputs");
+  CMD2LCD(0xC0);
+  char2LCD("room size: ");
+  POT_Select();
+  while(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13))
+  {
+	  CMD2LCD(0xCB);
+	  //roomSz = ADC_Read();
+	  //			if(roomSz < 0x555)
+	  //			{
+	  //				strcpy((char *)room_str, "ed435");
+	  //			}
+	  //			else if(roomSz < 0xAAA)
+	  //			{
+	  //				strcpy((char *)room_str, "ed486");
+	  //			}
+	  //			else if(roomSz < 0xFFF)
+	  //			{
+	  //				strcpy((char *)room_str, "cl110");
+	  //			}
 
+	  strcpy((char *)room_str, roomSelect(ADC_Read()));
+	  char2LCD((char *)room_str);
+	  //		char2LCD("8");
+	  //		HAL_Delay(300);
+	  //		CMD2LCD(0xCB);
+	  //		char2LCD("2");
+	  //		HAL_Delay(300);
+  }
+  CMD2LCD(0x01);
+  //	if(osMessageQueuePut(roomQueueHandle, &roomSz, 1U, 0U) != osOK)
+  //	{
+  //		Error_Handler();
+  //	}
 
-	CMD2LCD(0x01);
-	char2LCD("use inputs");
-	CMD2LCD(0xC0);
-	char2LCD("room size: ");
-	POT_Select();
-	while(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13))
-	{
-		CMD2LCD(0xCB);
-		//roomSz = ADC_Read();
-//			if(roomSz < 0x555)
-//			{
-//				strcpy((char *)room_str, "ed435");
-//			}
-//			else if(roomSz < 0xAAA)
-//			{
-//				strcpy((char *)room_str, "ed486");
-//			}
-//			else if(roomSz < 0xFFF)
-//			{
-//				strcpy((char *)room_str, "cl110");
-//			}
+//  timSELECT += (double)timer_stop(timStart);
+//  num++;
+//  }
+//  timSELECT = timSELECT / 8000 / 100;
 
-		strcpy((char *)room_str, roomSelect(ADC_Read()));
-		char2LCD((char *)room_str);
-//		char2LCD("8");
-//		HAL_Delay(300);
-//		CMD2LCD(0xCB);
-//		char2LCD("2");
-//		HAL_Delay(300);
-	}
-	CMD2LCD(0x01);
-//	if(osMessageQueuePut(roomQueueHandle, &roomSz, 1U, 0U) != osOK)
-//	{
-//		Error_Handler();
-//	}
+//  sprintf(textTX, "Room select: %lfms\r\n", timSELECT);
+//  printString((const char *)textTX);
 
+//  while(1)
+//  {
+//
+//  }
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -327,43 +351,43 @@ static void MX_ADC1_Init(void)
   hadc1.Init.DiscontinuousConvMode = DISABLE;
   hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc1.Init.NbrOfConversion = 1;
+  hadc1.Init.NbrOfConversion = 4;
   if (HAL_ADC_Init(&hadc1) != HAL_OK)
   {
     Error_Handler();
   }
-//  /** Configure Regular Channel
-//  */
-//  sConfig.Channel = ADC_CHANNEL_7;
-//  sConfig.Rank = ADC_REGULAR_RANK_1;
-//  sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
-//  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-//  {
-//    Error_Handler();
-//  }
-//  /** Configure Regular Channel
-//  */
-//  sConfig.Channel = ADC_CHANNEL_4;
-//  sConfig.Rank = ADC_REGULAR_RANK_2;
-//  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-//  {
-//    Error_Handler();
-//  }
-//  /** Configure Regular Channel
-//  */
-//  sConfig.Channel = ADC_CHANNEL_1;
-//  sConfig.Rank = ADC_REGULAR_RANK_3;
-//  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-//  {
-//    Error_Handler();
-//  }
-//  /** Configure Regular Channel
-//  */
-//  sConfig.Rank = ADC_REGULAR_RANK_4;
-//  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-//  {
-//    Error_Handler();
-//  }
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_7;
+  sConfig.Rank = ADC_REGULAR_RANK_1;
+  sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_4;
+  sConfig.Rank = ADC_REGULAR_RANK_2;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_1;
+  sConfig.Rank = ADC_REGULAR_RANK_3;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure Regular Channel
+  */
+  sConfig.Rank = ADC_REGULAR_RANK_4;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
   /* USER CODE BEGIN ADC1_Init 2 */
 
   /* USER CODE END ADC1_Init 2 */
@@ -579,7 +603,7 @@ void StartSendTask(void *argument)
 			printString((char *)data_str);
 			printString("\r\n");
 		}
-		osDelay(1000);
+		osDelay(60000);
 	}
 	osThreadTerminate(NULL);
   /* USER CODE END StartSendTask */
