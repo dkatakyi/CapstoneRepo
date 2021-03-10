@@ -89,8 +89,8 @@ const osMessageQueueAttr_t roomQueue_attributes = {
   .name = "roomQueue"
 };
 /* USER CODE BEGIN PV */
-bool sel = true;
-bool proceed = false;
+//bool sel = true;
+//bool proceed = false;
 uint8_t room_str[40];
 /* USER CODE END PV */
 
@@ -181,7 +181,7 @@ int main(void)
   CMD2LCD(0xC0);
   char2LCD("room size: ");
   POT_Select();
-  while(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13))
+  while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6))
   {
 	  CMD2LCD(0xCB);
 	  //roomSz = ADC_Read();
@@ -206,7 +206,9 @@ int main(void)
 	  //		char2LCD("2");
 	  //		HAL_Delay(300);
   }
+  printString((char *)room_str);
   CMD2LCD(0x01);
+
   //	if(osMessageQueuePut(roomQueueHandle, &roomSz, 1U, 0U) != osOK)
   //	{
   //		Error_Handler();
@@ -451,12 +453,6 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_5, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : PC13 */
-  GPIO_InitStruct.Pin = GPIO_PIN_13;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
   /*Configure GPIO pins : PC0 PC1 PC2 PC3
                            PC4 PC5 PC6 PC7 */
   GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3
@@ -480,6 +476,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : PB6 */
+  GPIO_InitStruct.Pin = GPIO_PIN_6;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
 }
 
 /* USER CODE BEGIN 4 */
@@ -501,29 +503,29 @@ static void MX_GPIO_Init(void)
 //
 //}
 
-uint16_t reg_out( uint32_t reg_data){
-
-int i;
-
-uint32_t shifted_val;
-
-//DAT2LCD (0x30);
+//uint16_t reg_out( uint32_t reg_data){
 //
-//DAT2LCD (0x78);
-
-for ( i=28; i >= 0 ; i = (i-4))
-
-{
-
-shifted_val = (reg_data >> i) & 0xf;
-if (i <= 8)
-{
-dipSW2LCD(shifted_val);
-}
-}
-return (uint16_t)reg_data;
-
-}
+//int i;
+//
+//uint32_t shifted_val;
+//
+////DAT2LCD (0x30);
+////
+////DAT2LCD (0x78);
+//
+//for ( i=28; i >= 0 ; i = (i-4))
+//
+//{
+//
+//shifted_val = (reg_data >> i) & 0xf;
+//if (i <= 8)
+//{
+//dipSW2LCD(shifted_val);
+//}
+//}
+//return (uint16_t)reg_data;
+//
+//}
 
 /* USER CODE END 4 */
 
