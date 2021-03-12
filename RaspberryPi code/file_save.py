@@ -17,10 +17,10 @@ while True:
         ser_msg = ser.readline()
         sensor_values = ser_msg[0:len(ser_msg)-2].decode("utf-8")  #decode the string values 
         print(sensor_values)
-        Temperature, Co2, Noise = sensor_values.split( )
+        Temperature, Co2, Noise, Room No, Device No = sensor_values.split( )
         with open("another_test_data.csv","a") as f:
             writer = csv.writer(f,delimiter=",")
-            writer.writerow([strftime("%Y-%m-%d"), strftime("%H:%M:%S"),Temperature, Co2, Noise])
+            writer.writerow([strftime("%Y-%m-%d"), strftime("%H:%M:%S"),Temperature, Co2, Noise, Room No, Device No(001)])
       except:      #This prints an error message when the "try" section of the code does not work
          print("Error!")
          break
