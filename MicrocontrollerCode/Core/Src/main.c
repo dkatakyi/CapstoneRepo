@@ -92,6 +92,7 @@ const osMessageQueueAttr_t roomQueue_attributes = {
 //bool sel = true;
 //bool proceed = false;
 uint8_t room_str[40];
+uint8_t cliBufferRX[20];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -153,7 +154,7 @@ int main(void)
   lcd_init();
 
   //uint8_t room_str[40];
-  uint16_t roomSz = 0;
+  //uint16_t roomSz = 0;
 
 //  char2LCD("hello");
 
@@ -176,6 +177,10 @@ int main(void)
 //  while(num < 100)
 //  {
 //  timStart = timer_start();
+  while((HAL_UART_Receive(&huart2, cliBufferRX, 1, 500) != HAL_OK) || (strcmp((char *)cliBufferRX, "x") != 0))
+  {}
+
+
   CMD2LCD(0x01);
   char2LCD("use inputs");
   CMD2LCD(0xC0);
@@ -207,6 +212,7 @@ int main(void)
 	  //		HAL_Delay(300);
   }
   printString((char *)room_str);
+  printString("\r\n");
   CMD2LCD(0x01);
 
   //	if(osMessageQueuePut(roomQueueHandle, &roomSz, 1U, 0U) != osOK)
@@ -353,43 +359,43 @@ static void MX_ADC1_Init(void)
   hadc1.Init.DiscontinuousConvMode = DISABLE;
   hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc1.Init.NbrOfConversion = 4;
+  hadc1.Init.NbrOfConversion = 1;
   if (HAL_ADC_Init(&hadc1) != HAL_OK)
   {
     Error_Handler();
   }
-  /** Configure Regular Channel
-  */
-  sConfig.Channel = ADC_CHANNEL_7;
-  sConfig.Rank = ADC_REGULAR_RANK_1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
-  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /** Configure Regular Channel
-  */
-  sConfig.Channel = ADC_CHANNEL_4;
-  sConfig.Rank = ADC_REGULAR_RANK_2;
-  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /** Configure Regular Channel
-  */
-  sConfig.Channel = ADC_CHANNEL_1;
-  sConfig.Rank = ADC_REGULAR_RANK_3;
-  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /** Configure Regular Channel
-  */
-  sConfig.Rank = ADC_REGULAR_RANK_4;
-  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
+//  /** Configure Regular Channel
+//  */
+//  sConfig.Channel = ADC_CHANNEL_7;
+//  sConfig.Rank = ADC_REGULAR_RANK_1;
+//  sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
+//  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+//  {
+//    Error_Handler();
+//  }
+//  /** Configure Regular Channel
+//  */
+//  sConfig.Channel = ADC_CHANNEL_4;
+//  sConfig.Rank = ADC_REGULAR_RANK_2;
+//  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+//  {
+//    Error_Handler();
+//  }
+//  /** Configure Regular Channel
+//  */
+//  sConfig.Channel = ADC_CHANNEL_1;
+//  sConfig.Rank = ADC_REGULAR_RANK_3;
+//  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+//  {
+//    Error_Handler();
+//  }
+//  /** Configure Regular Channel
+//  */
+//  sConfig.Rank = ADC_REGULAR_RANK_4;
+//  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+//  {
+//    Error_Handler();
+//  }
   /* USER CODE BEGIN ADC1_Init 2 */
 
   /* USER CODE END ADC1_Init 2 */
@@ -452,6 +458,12 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_5, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : PC13 */
+  GPIO_InitStruct.Pin = GPIO_PIN_13;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PC0 PC1 PC2 PC3
                            PC4 PC5 PC6 PC7 */
@@ -539,7 +551,7 @@ static void MX_GPIO_Init(void)
 void StartCalcTask(void *argument)
 {
   /* USER CODE BEGIN 5 */
-	uint16_t data = 0;
+	//uint16_t data = 0;
 	struct DataStruct dc;
 	dc.temp = 0;
 	dc.CO2 = 0;
@@ -605,7 +617,7 @@ void StartSendTask(void *argument)
 			printString((char *)data_str);
 			printString("\r\n");
 		}
-		osDelay(60000);
+		osDelay(5000);
 	}
 	osThreadTerminate(NULL);
   /* USER CODE END StartSendTask */
@@ -622,7 +634,7 @@ void StartLcdTask(void *argument)
 {
   /* USER CODE BEGIN StartLcdTask */
 	uint8_t raw_str[40];
-	uint16_t roomSz = 0;
+	//uint16_t roomSz = 0;
 	struct DataStruct rc;
 	/* Infinite loop */
 	for(;;)

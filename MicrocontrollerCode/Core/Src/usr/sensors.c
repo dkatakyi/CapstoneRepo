@@ -20,8 +20,8 @@ uint16_t CO2Conversion(uint32_t input)
  }
  else 
  {
-  uint16_t voltagedif = (input - 400) * 50 / 16; /*this is for voltage to PPM conversion*/
-  return voltagedif;
+  uint16_t voltagedif = (input - 400) * 40 / 16; /*this is for voltage to PPM conversion*/
+  return voltagedif - 1000;
   }
  /*CO2 has a 100ms delay before looping*/
 }
@@ -39,11 +39,12 @@ uint16_t NoiseConversion(uint32_t input)
 //  return PinVoltage * 50.0; /* 50.0 is voltage to dB conversion value */
  /* has an 125ms delay before looping*/
 
-input = (float)input / 1000 * 50;
+//input = input * 50 / 1000;
 
-// input = input - 600;
-// input /= 20;
-// input += 30;
+ input = input - 600;
+ input /= 20;
+ input += 30;
+ input -= 8;
  return input;
 
 }

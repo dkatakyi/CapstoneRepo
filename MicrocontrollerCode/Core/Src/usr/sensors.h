@@ -3,6 +3,9 @@
  *
  *  Created on: Jan 5, 2021
  *      Author: danieltakyi
+ * Description: This file contains all functions needed to
+ * 				interface to the sensor module
+ *
  */
 
 #ifndef SRC_USR_SENSORS_H_
