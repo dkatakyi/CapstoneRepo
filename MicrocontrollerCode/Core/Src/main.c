@@ -177,16 +177,17 @@ int main(void)
 //  while(num < 100)
 //  {
 //  timStart = timer_start();
-  while((HAL_UART_Receive(&huart2, cliBufferRX, 1, 500) != HAL_OK) || (strcmp((char *)cliBufferRX, "x") != 0))
-  {}
-
-
   CMD2LCD(0x01);
+//  while((HAL_UART_Receive(&huart2, cliBufferRX, 1, 500) != HAL_OK) || (strcmp((char *)cliBufferRX, "x") != 0))
+//  {}
+//
+//
+//
   char2LCD("use inputs");
   CMD2LCD(0xC0);
   char2LCD("room size: ");
   POT_Select();
-  while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6))
+  while(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13))
   {
 	  CMD2LCD(0xCB);
 	  //roomSz = ADC_Read();
@@ -211,8 +212,8 @@ int main(void)
 	  //		char2LCD("2");
 	  //		HAL_Delay(300);
   }
-  printString((char *)room_str);
-  printString("\r\n");
+//  printString((char *)room_str);
+//  printString("\r\n");
   CMD2LCD(0x01);
 
   //	if(osMessageQueuePut(roomQueueHandle, &roomSz, 1U, 0U) != osOK)
@@ -615,6 +616,8 @@ void StartSendTask(void *argument)
 			printString(" ");
 			sprintf((char *)data_str, "%d", dc.dB);
 			printString((char *)data_str);
+			printString(" ");
+			printString((char *)room_str);
 			printString("\r\n");
 		}
 		osDelay(5000);

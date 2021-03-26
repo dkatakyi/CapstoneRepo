@@ -1,0 +1,5 @@
+#!/bin/bash
+
+python3  file_save.py & 
+python3  server_send.py &
+
