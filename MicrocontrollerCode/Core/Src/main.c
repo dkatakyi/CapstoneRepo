@@ -187,7 +187,7 @@ int main(void)
   CMD2LCD(0xC0);
   char2LCD("room size: ");
   POT_Select();
-  while(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13))
+  while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6))
   {
 	  CMD2LCD(0xCB);
 	  //roomSz = ADC_Read();
@@ -215,6 +215,17 @@ int main(void)
 //  printString((char *)room_str);
 //  printString("\r\n");
   CMD2LCD(0x01);
+
+//  char2LCD("waiting for");
+//  CMD2LCD(0xC0);
+//  char2LCD("sensors...");
+//
+//  CO2_Select();
+//
+//  while(CO2Conversion(ADC_Read()) > 4000)
+//  {}
+//
+//  CMD2LCD(0x01);
 
   //	if(osMessageQueuePut(roomQueueHandle, &roomSz, 1U, 0U) != osOK)
   //	{
@@ -653,6 +664,8 @@ void StartLcdTask(void *argument)
 //				char2LCD("rs:");
 //				char2LCD((char *)raw_str);
 //			}
+
+			//CMD2LCD(0x01);
 
 			CMD2LCD(0x80);
 			char2LCD("rs:");

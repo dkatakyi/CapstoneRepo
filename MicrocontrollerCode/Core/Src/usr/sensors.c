@@ -21,7 +21,7 @@ uint16_t CO2Conversion(uint32_t input)
  else 
  {
   uint16_t voltagedif = (input - 400) * 40 / 16; /*this is for voltage to PPM conversion*/
-  return voltagedif - 1000;
+  return voltagedif;
   }
  /*CO2 has a 100ms delay before looping*/
 }
