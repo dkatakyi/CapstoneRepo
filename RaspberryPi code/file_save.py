@@ -9,29 +9,23 @@ import csv
 from time import time, sleep, strftime
 import os
 
-Device = 0b0001
-filename = "/home/pi/Desktop/" + str(bin(Device)) + ".csv"
-
+#creates a device number as well as a csv file to pu the sensor values in it and creates the columns in the csv file to store the sensor values in it.
+Device = 0b0001 
+filename = "/home/pi/Desktop/" + str(bin(Device)) + ".csv"  
 ser = serial.Serial ("/dev/ttyACM0", 115200) #Open port with baud rate
 ser.reset_input_buffer()
-ser.reset_output_buffer()
-#ser.flushInput()                             #clears the queue
+ser.reset_output_buffer()                           
 file = open(filename, "a")
 file.truncate(0)
 file.write("Date,Time,Temperature(Celsius),CO2(ppm),Noise Level(dBa),Room,Device No\n")
 file.close()
-# ser.write('x'.encode('utf-8'))
 ser.flush()
 
 #This program reads the sensors values sent through serial connection
 #Decodes the string values and saves in into a csv file with the date and time
-#This keeps the program running till it encounters an error
 while True:
-#      try:
     ser_msg = ser.read_until()
-    sensor_values = ser_msg[0:len(ser_msg)-2].decode("utf-8")  #decode the string values
-        #senso_values = ser_msg[0:len(ser_msg)-2]
-        
+    sensor_values = ser_msg[0:len(ser_msg)-2].decode("utf-8")  #decode the string values  
     print(sensor_values)
     Temperature, Co2, Noise, Room = sensor_values.split( )
     with open(filename,"a") as f:
@@ -39,6 +33,4 @@ while True:
         writer.writerow([strftime("%Y-%m-%d"), strftime("%H:%M:%S"), Temperature, Co2, Noise, Room, str(Device)])
         f.close()
     os.system('cp /home/pi/Desktop/0b1.csv /home/pi/Desktop/test/0b1.csv')
-#      except:      #This prints an error message when the "try" section of the code does not work
-#         print("Error!")
-         #break
+
