@@ -1,6 +1,10 @@
-#This program sends the csv file to the website via FTP
-#By Group 2 Capstone Project
-
+***************************************************************************************************************************************
+  * @file           : server_send.py
+  * @brief          : Main program body
+  * @author			: ESE Group 2
+  * @application	: Room Occupancy Management System
+  * @purpose		: This program sends the csv file to the website via FTP
+******************************************************************************************************************************************
 #!/usr/bin/python3
 
 #importing libaries 
