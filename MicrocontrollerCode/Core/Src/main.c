@@ -3,6 +3,12 @@
   ******************************************************************************
   * @file           : main.c
   * @brief          : Main program body
+  * @author			: Daniel Takyi
+  * @application	: Room Occupancy Management System
+  * @purpose		: Reads various sensor values and sends them formatted in a
+  * 				  string to another device. Other features include printind
+  * 				  data onto an LCD screen, and user selection control.
+  *
   ******************************************************************************
   * @attention
   *
@@ -30,7 +36,7 @@
 #include "./usr/UserInput.h"
 #include <stdbool.h>
 
-#include "./usr/timer.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -153,36 +159,8 @@ int main(void)
 
   lcd_init();
 
-  //uint8_t room_str[40];
-  //uint16_t roomSz = 0;
-
-//  char2LCD("hello");
-
-//  CMD2LCD(0xC0);
-
-//  char2LCD("there");
-
-//  printString("\x1b[2J");
-//
-//  printString("\x1b[0;0H");
-
-//  volatile double timSELECT = 0;
-//  volatile double timLCD = 0;
-//  volatile double timCALC = 0;
-//  volatile double timSEND = 0;
-//  int num = 0;
-//  uint16_t volatile timStart;
-//  uint8_t textTX[56];
-//
-//  while(num < 100)
-//  {
-//  timStart = timer_start();
   CMD2LCD(0x01);
-//  while((HAL_UART_Receive(&huart2, cliBufferRX, 1, 500) != HAL_OK) || (strcmp((char *)cliBufferRX, "x") != 0))
-//  {}
-//
-//
-//
+
   char2LCD("use inputs");
   CMD2LCD(0xC0);
   char2LCD("room size: ");
@@ -190,60 +168,14 @@ int main(void)
   while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6))
   {
 	  CMD2LCD(0xCB);
-	  //roomSz = ADC_Read();
-	  //			if(roomSz < 0x555)
-	  //			{
-	  //				strcpy((char *)room_str, "ed435");
-	  //			}
-	  //			else if(roomSz < 0xAAA)
-	  //			{
-	  //				strcpy((char *)room_str, "ed486");
-	  //			}
-	  //			else if(roomSz < 0xFFF)
-	  //			{
-	  //				strcpy((char *)room_str, "cl110");
-	  //			}
-
 	  strcpy((char *)room_str, roomSelect(ADC_Read()));
 	  char2LCD((char *)room_str);
-	  //		char2LCD("8");
-	  //		HAL_Delay(300);
-	  //		CMD2LCD(0xCB);
-	  //		char2LCD("2");
-	  //		HAL_Delay(300);
+
   }
-//  printString((char *)room_str);
-//  printString("\r\n");
+
   CMD2LCD(0x01);
 
-//  char2LCD("waiting for");
-//  CMD2LCD(0xC0);
-//  char2LCD("sensors...");
-//
-//  CO2_Select();
-//
-//  while(CO2Conversion(ADC_Read()) > 4000)
-//  {}
-//
-//  CMD2LCD(0x01);
 
-  //	if(osMessageQueuePut(roomQueueHandle, &roomSz, 1U, 0U) != osOK)
-  //	{
-  //		Error_Handler();
-  //	}
-
-//  timSELECT += (double)timer_stop(timStart);
-//  num++;
-//  }
-//  timSELECT = timSELECT / 8000 / 100;
-
-//  sprintf(textTX, "Room select: %lfms\r\n", timSELECT);
-//  printString((const char *)textTX);
-
-//  while(1)
-//  {
-//
-//  }
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -509,47 +441,7 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-//void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-//{
-//	if(GPIO_Pin == GPIO_PIN_13)
-//	{
-//		if(sel == false)
-//		{
-//			sel = true;
-//		}
-//		else
-//		{
-//			sel = false;
-//		}
-//		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-//
-//	}
-//
-//}
 
-//uint16_t reg_out( uint32_t reg_data){
-//
-//int i;
-//
-//uint32_t shifted_val;
-//
-////DAT2LCD (0x30);
-////
-////DAT2LCD (0x78);
-//
-//for ( i=28; i >= 0 ; i = (i-4))
-//
-//{
-//
-//shifted_val = (reg_data >> i) & 0xf;
-//if (i <= 8)
-//{
-//dipSW2LCD(shifted_val);
-//}
-//}
-//return (uint16_t)reg_data;
-//
-//}
 
 /* USER CODE END 4 */
 
@@ -580,15 +472,11 @@ void StartCalcTask(void *argument)
 		NOISE_Select();
 		dc.dB = NoiseConversion(ADC_Read());
 
-//		dc.CO2 += 5;
-//		dc.dB += 10;
-
 		if(osMessageQueuePut(rawQueueHandle, &dc, 1U, 0U) != osOK)
 		{
 			Error_Handler();
 		}
 
-		//DataFormat()
 		//OccupancyCalculation()
 
 		if(osMessageQueuePut(structQueueHandle, &dc, 1U, 0U) != osOK)
@@ -648,24 +536,13 @@ void StartLcdTask(void *argument)
 {
   /* USER CODE BEGIN StartLcdTask */
 	uint8_t raw_str[40];
-	//uint16_t roomSz = 0;
 	struct DataStruct rc;
 	/* Infinite loop */
 	for(;;)
 	{
 		if(osMessageQueueGet(rawQueueHandle, &rc, NULL, 0U) == osOK)
 		{
-//			if(osMessageQueueGet(roomQueueHandle, &roomSz, NULL, 0U) == osOK)
-//			{
-//				roomSz = roomSz / 2.67;
-//				roomSz += 500;
-//				sprintf((char *)raw_str, "%d", roomSz);
-//				CMD2LCD(0x80);
-//				char2LCD("rs:");
-//				char2LCD((char *)raw_str);
-//			}
 
-			//CMD2LCD(0x01);
 
 			CMD2LCD(0x80);
 			char2LCD("rs:");

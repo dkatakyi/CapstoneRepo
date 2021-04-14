@@ -31,18 +31,18 @@ void lcd_IO_init (void);
 /**
  * Function name:	CMD2LCD
  * Preconditions:	n/a
- * Postconditiions:
- * Return type:
- * Purpose:
+ * Postconditiions:	LCD affected
+ * Return type:		n/a
+ * Purpose:			Send commands to LCD
  */
 void CMD2LCD(uint8_t);
 
 /**
  * Function name:	DAT2LCD
- * Preconditions:
- * Postconditiions:
- * Return type:
- * Purpose:
+ * Preconditions:	n/a
+ * Postconditiions:	LCD affected
+ * Return type:		n/a
+ * Purpose:			Send commands to LCD
  */
 void DAT2LCD(uint8_t);
 
@@ -56,20 +56,11 @@ void DAT2LCD(uint8_t);
 void lcd_init(void);
 
 /**
- * Function name:	dipSW2LCD
- * Preconditions:
- * Postconditiions:
- * Return type:
- * Purpose:
- */
-void dipSW2LCD(uint8_t);
-
-/**
  * Function name:	char2LCD
- * Preconditions:
- * Postconditiions:
- * Return type:
- * Purpose:
+ * Preconditions:	n/a
+ * Postconditiions:	Characters are printed onto the LCD
+ * Return type:		n/a
+ * Purpose:			Print the string in the argument out onto the LCD screen
  */
 void char2LCD(char *);
 
