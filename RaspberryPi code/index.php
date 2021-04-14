@@ -1,5 +1,10 @@
-/* This program designs a website. This website displays the data values placed in the CSV file and it is updated every 1 mins */
-/* capstone project by ESE group 2 */
+/****************************************************************************************************************************************************
+   @file           : index.php
+   @brief          : Main program body
+   @author			: ESE Group 2
+   @application	: Room Occupancy Management System
+   @purpose		: This program designs a website. This website displays the data values placed in the CSV file and it is updated every 1 mins 
+*******************************************************************************************************************************************************/
 
 <!DOCTYPE html>
 <html>
