@@ -1,10 +1,8 @@
-***************************************************************************************************************************************
-  * @file           : time_test.py
-  * @brief          : Main program body
-  * @author			    : ESE Group 2
-  * @application	  : Room Occupancy Management System
-  * @purpose		    : This program runs the file_save.py and server_send.py respectively as a subprocess 
-******************************************************************************************************************************************
+# @file           : time_test.py
+# @brief          : Main program body
+# @author			    : ESE Group 2
+# @application	  : Room Occupancy Management System
+# @purpose		    : This program runs the file_save.py and server_send.py respectively as a subprocess 
 
 #This program runs the file_save.py and server_send.py  respectively as a subprocess 
 #By Group 2 Capstone Project
