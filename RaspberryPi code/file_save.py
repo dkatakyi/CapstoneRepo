@@ -1,5 +1,10 @@
-#This program recieves sensor values from the STM32 nucleo serially and stores the data values in a csv file.
-#By Group 2 Capstone Project
+******************************************************************************
+  * @file           : file_save.py
+  * @brief          : Main program body
+  * @author			: ESE Group 2
+  * @application	: Room Occupancy Management System
+  * @purpose		: This program recieves sensor values from the STM32 nucleo serially and stores the data values in a csv file.
+******************************************************************************
 
 #!/usr/bin/python3
 
