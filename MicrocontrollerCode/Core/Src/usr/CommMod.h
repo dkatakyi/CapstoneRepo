@@ -3,6 +3,9 @@
  *
  *  Created on: Jan 5, 2021
  *      Author: danieltakyi
+ * Description: This file contains all functions needed to
+ * 				interface to the communication module
+ *
  */
 
 #ifndef SRC_USR_COMMMOD_H_
@@ -17,11 +20,11 @@
 extern UART_HandleTypeDef huart2;
 
 /**
- * Function name: printString
- * Preconditions: n/a
- * Postconditiions: character array transmitted
- * Return type: n/a
- * Purpose: Print out a message to terminal via USART transmit
+ * Function name:	printString
+ * Preconditions:	n/a
+ * Postconditiions:	character array transmitted
+ * Return type:		n/a
+ * Purpose:			Print out a message to terminal via USART transmit
  */
 void printString(const char* mess);
 
