@@ -1,6 +1,6 @@
 This is our university of regina capstone project.
 
-ROMS – Room Occupancy Management System
+##ROMS – Room Occupancy Management System
 
 Abstract:
 The University of Regina Facilities Management department is in the process of updating its dashboard for a new energy consumption management system. 
