@@ -1,6 +1,6 @@
 # Room Occupancy Management System (ROMS)
 ## Creators
-Daniel Takyi, Dwijen Kapadia Arpan Dhamane, Chiamaka Aligwekwe
+Daniel Takyi, Dwijen Kapadia, Arpan Dhamane, Chiamaka Aligwekwe
 ## Abstract
 The University of Regina Facilities Management department is in the process of updating its dashboard for a new energy consumption management system. 
 One feature to incorporate is relating energy consumption with the occupancy in specific areas. 
