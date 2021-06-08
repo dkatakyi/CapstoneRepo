@@ -1,8 +1,7 @@
-This is our university of regina capstone project.
-
-##ROMS – Room Occupancy Management System
-
-Abstract:
+# Room Occupancy Management System (ROMS)
+## Creators
+Daniel Takyi, Dwijen Kapadia Arpan Dhamane, Chiamaka Aligwekwe
+## Abstract
 The University of Regina Facilities Management department is in the process of updating its dashboard for a new energy consumption management system. 
 One feature to incorporate is relating energy consumption with the occupancy in specific areas. 
 Our project provides temperature measurement, noise and CO2 levels in a particular space and determines the occupancy in that area. 
@@ -12,3 +11,5 @@ The proprietary data hub will be saving and sending the data in a file format to
 The Room Occupancy Management System device is designed with a user-friendly interface that allows the individual to set the system according to the room size. 
 To relate to occupancy we weren’t able to get enough raw data because of testing constraints due to covid-19 regulations.
 In real time operation with crowded areas we could get actual readings.
+## Video Link
+https://drive.google.com/file/d/1TUD0zL3t_-CGni0Mn45NEuY90ytRfxuK/view?usp=sharing
