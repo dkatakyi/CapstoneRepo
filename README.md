@@ -11,5 +11,5 @@ The proprietary data hub will be saving and sending the data in a file format to
 The Room Occupancy Management System device is designed with a user-friendly interface that allows the individual to set the system according to the room size. 
 To relate to occupancy we weren’t able to get enough raw data because of testing constraints due to covid-19 regulations.
 In real time operation with crowded areas we could get actual readings.
-## Video Demonstration
-[![](https://drive.google.com/file/d/1d4A_Ce2f1nZY1XZdFaxJ5AzTLNOrxRke/view?usp=sharing)](https://drive.google.com/file/d/1TUD0zL3t_-CGni0Mn45NEuY90ytRfxuK/view?usp=sharing)
+## Video Link
+https://drive.google.com/file/d/1TUD0zL3t_-CGni0Mn45NEuY90ytRfxuK/view?usp=sharing
